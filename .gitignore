@@ -1,0 +1,15 @@
+.DS_Store
+._*
+
+# Runtime configuration
+.env
+.env.*
+!.env.example
+
+# Dependencies and build output
+node_modules/
+dist/
+coverage/
+
+# Go build output
+backend/bin/
