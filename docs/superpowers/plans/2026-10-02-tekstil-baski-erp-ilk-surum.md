@@ -67,7 +67,7 @@ Expected: FAIL because configuration package is absent.
 
 - [ ] **Step 3: Implement configuration, database pool, health endpoint, migrations and Compose services**
 
-Define `Config` with `Port`, `DatabaseURL` and `FrontendOrigin`; expose `GET /healthz` returning `{ "status": "ok" }`. Create all initial tables from the spec, primary/foreign keys and indexes for customer name, phone, job number, pattern code and due date.
+Define `Config` with `Port`, `DatabaseURL` and `FrontendOrigin`; expose `GET /healthz` returning `{ "status": "ok" }`. Compose initially starts PostgreSQL and the API; Task 5 adds the frontend service. Create all initial tables from the spec, primary/foreign keys and indexes for customer name, phone, job number, pattern code and due date.
 
 - [ ] **Step 4: Run Go tests and a clean migration startup**
 
@@ -167,7 +167,7 @@ Expected: FAIL because dashboard package is absent.
 
 - [ ] **Step 3: Implement `GET /api/v1/dashboard`**
 
-Return the four job counts and total receivable with a single read model service. Overdue means delivery date before the supplied local date and status is neither delivered nor cancelled.
+Return the four job counts and total receivable with a single read model service. Overdue means delivery date before the supplied local date and status is neither `teslim_edildi` nor `iptal_edildi`.
 
 - [ ] **Step 4: Run dashboard tests**
 
@@ -181,7 +181,7 @@ Run: `git add backend && git commit -m "feat: add dashboard summary API"`
 ### Task 5: React uygulama kabuğu ve API istemcisi
 
 **Files:**
-- Create: `frontend/package.json`, `vite.config.ts`, `tsconfig.json`, `src/main.tsx`, `src/App.tsx`
+- Create: `frontend/package.json`, `vite.config.ts`, `tsconfig.json`, `Dockerfile`, `src/main.tsx`, `src/App.tsx`
 - Create: `frontend/src/lib/api.ts`, `frontend/src/lib/money.ts`, `frontend/src/styles.css`
 - Create: `frontend/src/components/AppShell.tsx`, `PageHeader.tsx`, `ErrorState.tsx`, `LoadingState.tsx`
 - Test: `frontend/src/lib/money.test.ts`, `frontend/src/components/AppShell.test.tsx`
@@ -217,7 +217,7 @@ Run: `git add frontend && git commit -m "feat: add ERP management panel shell"`
 **Files:**
 - Create: `frontend/src/pages/DashboardPage.tsx`, `CustomersPage.tsx`, `CustomerDetailPage.tsx`, `JobsPage.tsx`, `JobFormPage.tsx`, `JobDetailPage.tsx`
 - Create: `frontend/src/components/MetricCard.tsx`, `CustomerForm.tsx`, `JobForm.tsx`, `JobStatusControl.tsx`
-- Modify: `frontend/src/App.tsx`, `frontend/src/lib/api.ts`, `frontend/src/styles.css`
+- Modify: `docker-compose.yml`, `frontend/src/App.tsx`, `frontend/src/lib/api.ts`, `frontend/src/styles.css`
 - Test: `frontend/src/pages/DashboardPage.test.tsx`, `CustomersPage.test.tsx`, `JobFormPage.test.tsx`
 
 **Interfaces:**
