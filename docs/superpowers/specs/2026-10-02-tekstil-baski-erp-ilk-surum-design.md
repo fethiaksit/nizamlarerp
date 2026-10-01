@@ -27,9 +27,10 @@ arayüz bileşenlerini birlikte başlatır. Bağlantı bilgileri ve ortam ayarla
 ortam değişkenleriyle sağlanır; böylece daha sonra aynı bileşenler bir sunucuya
 taşınabilir.
 
-İlk sürüm tek yönetici kullanıcısına odaklanır. `users` tablosu ve oturum
-katmanı, daha sonra çoklu kullanıcı ve rol desteğinin eklenmesine uygun
-tutulur; ancak ilk sürüm rol yönetim ekranı içermez.
+İlk sürüm tek yönetici kullanıcısına odaklanır ve yerel ağ güven sınırı içinde
+ayrı bir giriş ekranı gerektirmez. `users` tablosu, daha sonra eklenecek oturum
+ve çoklu kullanıcı/rol desteği için şemada ayrılır; ilk sürüm rol veya kullanıcı
+yönetim ekranı içermez.
 
 ## Mimari
 
@@ -76,8 +77,10 @@ zorunludur. Telefon ve firma adına göre hızlı arama desteklenir.
 ### jobs
 
 Bir müşteriye bağlı iş/siparişi temsil eder. İş numarası, desen adı/kodu,
-opsiyonel desen dosyası, kumaş, baskı türü, renk, miktar, birim, birim fiyat,
-toplam tutar, sipariş/teslim tarihleri ve notlar içerir. Toplam tutar API
+opsiyonel desen referansı, kumaş, baskı türü, renk, miktar, birim, birim fiyat,
+toplam tutar, sipariş/teslim tarihleri ve notlar içerir. Desen görseli/dosyası
+için dosya depolama sonraki sürüme bırakılır; ilk sürümde referans olarak dosya
+adı veya bağlantı kaydedilebilir. Toplam tutar API
 tarafında miktar ile birim fiyatın çarpımından hesaplanır.
 
 İş durumları: `yeni`, `desen_hazirlaniyor`, `onay_bekliyor`, `baskida`,
