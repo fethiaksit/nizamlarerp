@@ -3,6 +3,8 @@ package platform
 import (
 	"net/http"
 
+	"github.com/fethiaksit/nizamlar-erp/backend/internal/customers"
+	"github.com/fethiaksit/nizamlar-erp/backend/internal/ledger"
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -21,6 +23,13 @@ func NewRouter(deps Dependencies) *gin.Engine {
 	router.GET("/healthz", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": "ok"})
 	})
+
+	api := router.Group("/api/v1")
+	if deps.DB != nil {
+		customerRepository := customers.NewRepository(deps.DB)
+		ledgerRepository := ledger.NewRepository(deps.DB)
+		customers.RegisterRoutes(api, customers.NewService(customerRepository, ledgerRepository))
+	}
 
 	return router
 }
