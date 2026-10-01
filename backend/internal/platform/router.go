@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/fethiaksit/nizamlar-erp/backend/internal/customers"
+	"github.com/fethiaksit/nizamlar-erp/backend/internal/jobs"
 	"github.com/fethiaksit/nizamlar-erp/backend/internal/ledger"
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -29,6 +30,7 @@ func NewRouter(deps Dependencies) *gin.Engine {
 		customerRepository := customers.NewRepository(deps.DB)
 		ledgerRepository := ledger.NewRepository(deps.DB)
 		customers.RegisterRoutes(api, customers.NewService(customerRepository, ledgerRepository))
+		jobs.RegisterRoutes(api, jobs.NewService(jobs.NewRepository(deps.DB)))
 	}
 
 	return router
