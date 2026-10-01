@@ -1,0 +1,42 @@
+package platform
+
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"github.com/jackc/pgx/v5/pgxpool"
+)
+
+// Dependencies are shared application resources passed to route modules.
+type Dependencies struct {
+	DB             *pgxpool.Pool
+	FrontendOrigin string
+}
+
+func NewRouter(deps Dependencies) *gin.Engine {
+	router := gin.New()
+	router.Use(gin.Logger(), gin.Recovery())
+	router.Use(cors(deps.FrontendOrigin))
+
+	router.GET("/healthz", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"status": "ok"})
+	})
+
+	return router
+}
+
+func cors(origin string) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if origin != "" {
+			c.Header("Access-Control-Allow-Origin", origin)
+		}
+		c.Header("Access-Control-Allow-Headers", "Content-Type")
+		c.Header("Access-Control-Allow-Methods", "GET, POST, PATCH, OPTIONS")
+		if c.Request.Method == http.MethodOptions {
+			c.Status(http.StatusNoContent)
+			c.Abort()
+			return
+		}
+		c.Next()
+	}
+}
