@@ -127,13 +127,15 @@ RETURNING id, account_id, customer_id, entry_type, category, amount::text, curre
 	// If customer_id is set and entry_type is tahsilat/odeme, update customer_transactions ledger!
 	if input.CustomerID != nil && (input.EntryType == "tahsilat" || input.EntryType == "odeme") {
 		dir := "credit" // Tahsilat -> customer alacaklanır (borcu düşer)
+		ledgerEntryType := "collection"
 		if input.EntryType == "odeme" {
 			dir = "debit" // Müşteriye ödeme yapıldı -> borçlandı
+			ledgerEntryType = "payment"
 		}
 		const insertCustTx = `
 INSERT INTO customer_transactions (customer_id, entry_type, direction, amount, currency, transaction_date, description)
 VALUES ($1, $2, $3, $4, $5, $6, $7)`
-		_, err = tx.Exec(ctx, insertCustTx, *input.CustomerID, input.EntryType, dir, amt.StringFixed(2), input.Currency, tDate, input.Description)
+		_, err = tx.Exec(ctx, insertCustTx, *input.CustomerID, ledgerEntryType, dir, amt.StringFixed(2), input.Currency, tDate, input.Description)
 		if err != nil {
 			return FinanceTransaction{}, err
 		}
