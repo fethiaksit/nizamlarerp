@@ -5,6 +5,7 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/fethiaksit/nizamlar-erp/backend/internal/ledger"
 	"github.com/google/uuid"
 )
 
@@ -42,6 +43,14 @@ func (stub ledgerReaderStub) OpenBalance(context.Context, uuid.UUID) (string, er
 
 func (stub ledgerReaderStub) ListByCustomer(context.Context, uuid.UUID) ([]Transaction, error) {
 	return nil, nil
+}
+
+func (stub ledgerReaderStub) CreateTransaction(context.Context, ledger.CreateTransactionInput) (ledger.Transaction, error) {
+	return ledger.Transaction{}, nil
+}
+
+func (stub ledgerReaderStub) ReverseTransaction(context.Context, uuid.UUID) error {
+	return nil
 }
 
 func TestCreateCustomerRejectsBlankCompanyName(t *testing.T) {

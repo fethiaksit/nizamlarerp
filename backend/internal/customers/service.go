@@ -11,11 +11,11 @@ import (
 
 type Service struct {
 	repository Repository
-	ledger     ledger.Reader
+	ledger     ledger.Manager
 }
 
-func NewService(repository Repository, ledgerReader ledger.Reader) *Service {
-	return &Service{repository: repository, ledger: ledgerReader}
+func NewService(repository Repository, ledgerManager ledger.Manager) *Service {
+	return &Service{repository: repository, ledger: ledgerManager}
 }
 
 func (service *Service) CreateCustomer(ctx context.Context, input CreateCustomerInput) (Customer, error) {
@@ -65,6 +65,15 @@ func (service *Service) UpdateCustomer(ctx context.Context, id uuid.UUID, input 
 
 func (service *Service) Transactions(ctx context.Context, id uuid.UUID) ([]ledger.Transaction, error) {
 	return service.ledger.ListByCustomer(ctx, id)
+}
+
+func (service *Service) AddTransaction(ctx context.Context, customerID uuid.UUID, input ledger.CreateTransactionInput) (ledger.Transaction, error) {
+	input.CustomerID = customerID
+	return service.ledger.CreateTransaction(ctx, input)
+}
+
+func (service *Service) ReverseTransaction(ctx context.Context, txID uuid.UUID) error {
+	return service.ledger.ReverseTransaction(ctx, txID)
 }
 
 func trimInput(input CreateCustomerInput) CreateCustomerInput {

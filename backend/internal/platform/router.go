@@ -3,10 +3,15 @@ package platform
 import (
 	"net/http"
 
+	"github.com/fethiaksit/nizamlar-erp/backend/internal/checks"
 	"github.com/fethiaksit/nizamlar-erp/backend/internal/customers"
 	"github.com/fethiaksit/nizamlar-erp/backend/internal/dashboard"
+	"github.com/fethiaksit/nizamlar-erp/backend/internal/finance"
 	"github.com/fethiaksit/nizamlar-erp/backend/internal/jobs"
 	"github.com/fethiaksit/nizamlar-erp/backend/internal/ledger"
+	"github.com/fethiaksit/nizamlar-erp/backend/internal/personnel"
+	"github.com/fethiaksit/nizamlar-erp/backend/internal/reports"
+	"github.com/fethiaksit/nizamlar-erp/backend/internal/settings"
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -30,9 +35,15 @@ func NewRouter(deps Dependencies) *gin.Engine {
 	if deps.DB != nil {
 		customerRepository := customers.NewRepository(deps.DB)
 		ledgerRepository := ledger.NewRepository(deps.DB)
+
 		customers.RegisterRoutes(api, customers.NewService(customerRepository, ledgerRepository))
 		jobs.RegisterRoutes(api, jobs.NewService(jobs.NewRepository(deps.DB)))
 		dashboard.RegisterRoute(api, dashboard.NewService(dashboard.NewRepository(deps.DB)))
+		finance.RegisterRoutes(api, finance.NewService(finance.NewRepository(deps.DB)))
+		checks.RegisterRoutes(api, checks.NewService(checks.NewRepository(deps.DB)))
+		personnel.RegisterRoutes(api, personnel.NewService(personnel.NewRepository(deps.DB)))
+		reports.RegisterRoutes(api, reports.NewService(reports.NewRepository(deps.DB)))
+		settings.RegisterRoutes(api, settings.NewService(settings.NewRepository(deps.DB)))
 	}
 
 	return router
@@ -43,8 +54,8 @@ func cors(origin string) gin.HandlerFunc {
 		if origin != "" {
 			c.Header("Access-Control-Allow-Origin", origin)
 		}
-		c.Header("Access-Control-Allow-Headers", "Content-Type")
-		c.Header("Access-Control-Allow-Methods", "GET, POST, PATCH, OPTIONS")
+		c.Header("Access-Control-Allow-Headers", "Content-Type, Authorization")
+		c.Header("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE, OPTIONS")
 		if c.Request.Method == http.MethodOptions {
 			c.Status(http.StatusNoContent)
 			c.Abort()

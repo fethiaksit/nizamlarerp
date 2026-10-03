@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/fethiaksit/nizamlar-erp/backend/internal/ledger"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
@@ -76,6 +77,37 @@ func RegisterRoutes(group *gin.RouterGroup, service *Service) {
 			return
 		}
 		c.JSON(http.StatusOK, transactions)
+	})
+
+	group.POST("/customers/:id/transactions", func(c *gin.Context) {
+		id, ok := parseID(c)
+		if !ok {
+			return
+		}
+		var input ledger.CreateTransactionInput
+		if err := c.ShouldBindJSON(&input); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"message": "Geçerli işlem bilgilerini girin."})
+			return
+		}
+		transaction, err := service.AddTransaction(c.Request.Context(), id, input)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+			return
+		}
+		c.JSON(http.StatusCreated, transaction)
+	})
+
+	group.POST("/customers/:id/transactions/:txId/reverse", func(c *gin.Context) {
+		txID, err := uuid.Parse(c.Param("txId"))
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"message": "Geçersiz işlem kaydı."})
+			return
+		}
+		if err := service.ReverseTransaction(c.Request.Context(), txID); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"message": "İşlem iptal edildi."})
 	})
 }
 

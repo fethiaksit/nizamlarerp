@@ -20,14 +20,20 @@ func RegisterRoutes(group *gin.RouterGroup, service *Service) {
 			c.JSON(http.StatusCreated, job)
 		}
 	})
+
 	group.GET("/jobs", func(c *gin.Context) {
-		items, err := service.ListJobs(c.Request.Context(), Filters{Search: c.Query("search"), Status: c.Query("status")})
+		items, err := service.ListJobs(c.Request.Context(), Filters{
+			Search:     c.Query("search"),
+			Status:     c.Query("status"),
+			CustomerID: c.Query("customer_id"),
+		})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"message": "İşler alınırken bir sorun oluştu."})
 			return
 		}
 		c.JSON(http.StatusOK, items)
 	})
+
 	group.GET("/jobs/:id", func(c *gin.Context) {
 		id, ok := parseID(c)
 		if !ok {
@@ -44,9 +50,23 @@ func RegisterRoutes(group *gin.RouterGroup, service *Service) {
 		}
 		c.JSON(http.StatusOK, job)
 	})
+
 	group.PATCH("/jobs/:id", func(c *gin.Context) {
-		c.JSON(http.StatusNotImplemented, gin.H{"message": "İş düzenleme bir sonraki güncellemede eklenecek."})
+		id, ok := parseID(c)
+		if !ok {
+			return
+		}
+		var input UpdateJobInput
+		if err := c.ShouldBindJSON(&input); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"message": "Geçerli iş bilgilerini girin."})
+			return
+		}
+		job, err := service.UpdateJob(c.Request.Context(), id, input)
+		if !respondError(c, err) {
+			c.JSON(http.StatusOK, job)
+		}
 	})
+
 	group.POST("/jobs/:id/status", func(c *gin.Context) {
 		id, ok := parseID(c)
 		if !ok {
@@ -72,6 +92,7 @@ func parseID(c *gin.Context) (uuid.UUID, bool) {
 	}
 	return id, true
 }
+
 func respondError(c *gin.Context, err error) bool {
 	if err == nil {
 		return false
@@ -80,7 +101,7 @@ func respondError(c *gin.Context, err error) bool {
 		c.JSON(http.StatusNotFound, gin.H{"message": "İş bulunamadı."})
 		return true
 	}
-	if err.Error() == "Bu iş numarası zaten kullanılıyor." || err.Error() == "Müşteri seçin." || err.Error() == "İş numarası zorunludur." || err.Error() == "Birim seçin." || err.Error() == "Miktar sıfırdan büyük olmalıdır." || err.Error() == "Birim fiyat sıfırdan büyük olmalıdır." || err.Error() == "Sipariş ve teslim tarihi zorunludur." || err.Error() == "Geçerli bir iş durumu seçin." {
+	if err.Error() == "Bu iş numarası zaten kullanılıyor." || err.Error() == "Müşteri seçin." || err.Error() == "İş numarası zorunludur." || err.Error() == "Birim seçin." || err.Error() == "Miktar sıfırdan büyük olmalıdır." || err.Error() == "Birim fiyat sıfırdan büyük olmalıdır." || err.Error() == "Sipariş ve teslim tarihi zorunludur." || err.Error() == "Geçerli bir iş durumu seçin." || err.Error() == "Teslim tarihi sipariş tarihinden önce olamaz." {
 		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return true
 	}
