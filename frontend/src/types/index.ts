@@ -194,3 +194,17 @@ export interface CompanySettings {
   currency: string
   updated_at: string
 }
+
+export interface User {
+  id: string
+  username: string
+  email: string
+  full_name: string
+  role: string
+}
+
+export interface LoginResponse {
+  token: string
+  user: User
+}
+

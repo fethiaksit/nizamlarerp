@@ -14,8 +14,9 @@ docker compose up --build
 - Arayüz: `http://localhost:5173`
 - API sağlık denetimi: `http://localhost:8080/healthz`
 
-İlk açılışta PostgreSQL şeması otomatik olarak oluşturulur. İlk sürüm yerel
-ağdaki tek yönetici kullanımı içindir; giriş ekranı yoktur.
+İlk açılışta PostgreSQL şeması ve başlangıç yönetici kullanıcısı otomatik olarak
+oluşturulur. Sisteme erişim kullanıcı adı veya e-posta ile güvenli giriş ekranından sağlanır
+(Geliştirme ortamı varsayılanı: `admin` / `yerel_gelistirme_parolasi`).
 
 ## Geliştirme kontrolleri
 
