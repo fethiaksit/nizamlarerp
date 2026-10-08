@@ -34,7 +34,7 @@ services:
     environment:
       DATABASE_URL: ${DATABASE_URL:-postgres://tekstil:yerel_gelistirme_parolasi@postgres:5432/tekstil_erp?sslmode=disable}
       PORT: 8080
-      FRONTEND_ORIGIN: ${FRONTEND_ORIGIN:-http://localhost:5173}
+      FRONTEND_ORIGIN: ${FRONTEND_ORIGIN:-https://yonetim.nizamlarbaski.com}
       AUTH_SECRET: ${AUTH_SECRET:-yerel_gelistirme_guvenlik_anahtari_en_az_32_karakter}
       INITIAL_ADMIN_USERNAME: ${INITIAL_ADMIN_USERNAME:-admin}
       INITIAL_ADMIN_EMAIL: ${INITIAL_ADMIN_EMAIL:-admin@nizamlar.com}
@@ -49,7 +49,7 @@ services:
     build:
       context: ./frontend
     environment:
-      VITE_API_BASE_URL: http://localhost:8080/api/v1
+      VITE_API_BASE_URL: /api/v1
     ports:
       - "5173:5173"
     depends_on:
