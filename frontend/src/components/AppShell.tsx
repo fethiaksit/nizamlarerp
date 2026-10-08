@@ -6,6 +6,7 @@ import { Modal } from './ui/Modal'
 import { Input, Select } from './ui/Input'
 import { useToast } from './ui/Toast'
 import { api } from '../lib/api'
+import { useAuth } from '../context/AuthContext'
 import type { Customer } from '../types'
 
 export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -19,8 +20,15 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
   const [customers, setCustomers] = useState<Customer[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { showToast } = useToast()
+  const { user, logout } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
+
+  const handleLogout = () => {
+    logout()
+    showToast('Başarıyla çıkış yapıldı.')
+    navigate('/login')
+  }
 
   const loadCustomers = async () => {
     try {
@@ -227,11 +235,24 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
         {!isCollapsed && (
           <div className="sidebar-footer">
             <div className="user-badge">
-              <div className="avatar">Y</div>
-              <div className="user-info">
-                <span className="user-name">Sistem Yöneticisi</span>
-                <span className="user-role">Nizamlar Tekstil ERP</span>
+              <div className="avatar">
+                {user?.full_name ? user.full_name[0].toUpperCase() : (user?.username ? user.username[0].toUpperCase() : 'Y')}
               </div>
+              <div className="user-info">
+                <span className="user-name" title={user?.full_name || user?.username || 'Sistem Yöneticisi'}>
+                  {user?.full_name || user?.username || 'Sistem Yöneticisi'}
+                </span>
+                <span className="user-role">{user?.role === 'admin' ? 'Yönetici' : (user?.role || 'Kullanıcı')}</span>
+              </div>
+              <button
+                type="button"
+                className="sidebar-logout-btn"
+                onClick={handleLogout}
+                title="Güvenli Çıkış Yap"
+                aria-label="Çıkış Yap"
+              >
+                <Icons.LogOut size={16} />
+              </button>
             </div>
           </div>
         )}
@@ -261,6 +282,16 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
             >
               Hızlı İşlem
             </Button>
+            <button
+              type="button"
+              className="navbar-logout-btn"
+              onClick={handleLogout}
+              title="Çıkış Yap"
+              aria-label="Çıkış Yap"
+            >
+              <Icons.LogOut size={16} />
+              <span className="desktop-only">Çıkış</span>
+            </button>
           </div>
         </header>
 

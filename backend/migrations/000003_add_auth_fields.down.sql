@@ -1,0 +1,6 @@
+-- Migration 000003 Down
+
+DROP INDEX IF EXISTS users_username_unique;
+ALTER TABLE users DROP COLUMN IF EXISTS role;
+ALTER TABLE users DROP COLUMN IF EXISTS full_name;
+ALTER TABLE users DROP COLUMN IF EXISTS username;

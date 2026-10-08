@@ -35,6 +35,10 @@ services:
       DATABASE_URL: ${DATABASE_URL:-postgres://tekstil:yerel_gelistirme_parolasi@postgres:5432/tekstil_erp?sslmode=disable}
       PORT: 8080
       FRONTEND_ORIGIN: ${FRONTEND_ORIGIN:-http://localhost:5173}
+      AUTH_SECRET: ${AUTH_SECRET:-yerel_gelistirme_guvenlik_anahtari_en_az_32_karakter}
+      INITIAL_ADMIN_USERNAME: ${INITIAL_ADMIN_USERNAME:-admin}
+      INITIAL_ADMIN_EMAIL: ${INITIAL_ADMIN_EMAIL:-admin@nizamlar.com}
+      INITIAL_ADMIN_PASSWORD: ${INITIAL_ADMIN_PASSWORD:-yerel_gelistirme_parolasi}
     ports:
       - "8080:8080"
     depends_on:
