@@ -220,7 +220,7 @@ export const JobDetailPage: React.FC = () => {
           <CardHeader>
             <CardTitle>Sipariş Detay Özeti</CardTitle>
           </CardHeader>
-          <CardContent style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+          <CardContent className="grid-col-2">
             <div>
               <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>İŞ / SİPARİŞ NO</div>
               <div style={{ fontWeight: 700 }}>{job.job_number}</div>
@@ -245,11 +245,11 @@ export const JobDetailPage: React.FC = () => {
               <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>BİRİM FİYAT</div>
               <div>{formatTRY(job.unit_price)}</div>
             </div>
-            <div style={{ gridColumn: 'span 2' }}>
+            <div className="col-span-2">
               <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>DESEN REFERANSI</div>
               <div>{job.pattern_reference || '-'}</div>
             </div>
-            <div style={{ gridColumn: 'span 2' }}>
+            <div className="col-span-2">
               <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>ÜRETİM NOTLARI</div>
               <div>{job.notes || 'Not bulunmuyor.'}</div>
             </div>

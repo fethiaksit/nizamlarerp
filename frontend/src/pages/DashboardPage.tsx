@@ -119,7 +119,7 @@ export const DashboardPage: React.FC = () => {
       </div>
 
       {/* Operational Job Cards */}
-      <div className="metrics-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))' }}>
+      <div className="metrics-grid">
         <MetricCard
           title="AKTİF İŞLER"
           value={summary.active_jobs}

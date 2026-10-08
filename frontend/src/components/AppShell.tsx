@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { Icons } from './ui/Icons'
 import { Button } from './ui/Button'
@@ -12,6 +12,17 @@ import type { Customer } from '../types'
 export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [isMobileOpen, setIsMobileOpen] = useState(false)
+
+  useEffect(() => {
+    if (isMobileOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isMobileOpen])
   const [financeMenuOpen, setFinanceMenuOpen] = useState(true)
   const [quickModalOpen, setQuickModalOpen] = useState(false)
 

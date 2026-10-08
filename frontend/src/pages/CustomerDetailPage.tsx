@@ -354,7 +354,7 @@ export const CustomerDetailPage: React.FC = () => {
               Düzenle
             </Button>
           </CardHeader>
-          <CardContent style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+          <CardContent className="grid-col-2">
             <div>
               <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>FİRMA UNVANI</div>
               <div style={{ fontWeight: 700, fontSize: '15px', marginTop: '2px' }}>{customer.company_name}</div>
@@ -373,11 +373,11 @@ export const CustomerDetailPage: React.FC = () => {
                 {customer.tax_office} {customer.tax_number ? `(${customer.tax_number})` : ''}
               </div>
             </div>
-            <div style={{ gridColumn: 'span 2' }}>
+            <div className="col-span-2">
               <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>AÇIK ADRES</div>
               <div style={{ marginTop: '2px' }}>{customer.address || '-'}</div>
             </div>
-            <div style={{ gridColumn: 'span 2' }}>
+            <div className="col-span-2">
               <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>NOTLAR</div>
               <div style={{ marginTop: '2px' }}>{customer.notes || '-'}</div>
             </div>
